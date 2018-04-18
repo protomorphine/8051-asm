@@ -2,169 +2,219 @@ main                                                                            
                          1             org 0
 0000 020030              2             jmp start
                          3
-                         4             org 3
-0003 020142              5             jmp mirror
+                         4             org 0BH
+000B 020178              5             jmp plus
                          6
-                         7             org 30h
-0030 7581FA              8     start:  mov sp, #0FAH
-0033 C288                9             clr it0
-0035 C28A               10             clr it1
-0037 D2A8               11             setb ie.0
-0039 D2AA               12             setb ex1
-003B D2AF               13             setb ea
-                        14
-                        15             ;обычные цифры
-003D 7530C0             16             mov 30h,#11000000b ;0
-0040 7531F9             17             mov 31h,#11111001b ;1
-0043 7532A4             18             mov 32h,#10100100b ;2
-0046 7533B0             19             mov 33h,#10110000b ;3
-0049 753499             20             mov 34h,#10011001b ;4
-004C 753592             21             mov 35h,#10010010b ;5
-004F 753682             22             mov 36h,#10000010b ;6
-0052 7537F8             23             mov 37h,#11111000b ;7
-0055 753880             24             mov 38h,#10000000b ;8
-0058 753990             25             mov 39h,#10010000b ;9
-005B 753A88             26             mov 3ah,#10001000b ;a
-005E 753B83             27             mov 3bh,#10000011b ;b
-0061 753CC6             28             mov 3ch,#11000110b ;c
-0064 753DA1             29             mov 3dh,#10100001b ;d
-                        30
-                        31             ;отзеркаленные цифры
-0067 7540C0             32             mov 40h,#11000000b ;0
-006A 7541CF             33             mov 41h,#11001111b ;1
-006D 754292             34             mov 42h,#10010010b ;2
-0070 754386             35             mov 43h,#10000110b ;3
-0073 75448D             36             mov 44h,#10001101b ;4
-0076 7545A4             37             mov 45h,#10100100b ;5
-0079 7546A0             38             mov 46h,#10100000b ;6
-007C 7547CE             39             mov 47h,#11001110b ;7
-007F 754880             40             mov 48h,#10000000b ;8
-0082 754984             41             mov 49h,#10000100b ;9
-0085 754A88             42             mov 4ah,#10001000b ;a
-0088 754B83             43             mov 4bh,#10000011b ;b
-008B 754CC6             44             mov 4ch,#11000110b ;c
-008E 754DA1             45             mov 4dh,#10100001b ;d
-                        46
-0091 C2D5               47             clr f0
-0093 756000             48             mov 60h,#0
-0096 7C05               49             mov r4, #5
-                        50
-                        51             ;обработка нажатий матричной клавиатуры
-0098 DCFE               52     keypad: djnz r4, keypad
-009A 7590EF             53             mov p1, #11101111b
-009D E590               54             mov a, p1
-009F 30E03F             55             jnb acc.0, kn1
-00A2 30E14B             56             jnb acc.1, kn4
-00A5 30E257             57             jnb acc.2, kn7
-                        58
-00A8 7590DF             59             mov p1,#11011111b
-00AB E590               60             mov a,p1
-00AD 30E036             61             jnb acc.0, kn2
-00B0 30E142             62             jnb acc.1, kn5
-00B3 30E24E             63             jnb acc.2, kn8
-00B6 30E323             64             jnb acc.3, kn0
+                         7             org 13h
+0013 020159              8             jmp mirror
+                         9
+                        10             org 1BH
+001B 020191             11             jmp minus
+                        12
+                        13             org 30h
+0030 7581FA             14     start:  mov sp, #0FAH
+0033 C288               15             clr it0
+0035 C28A               16             clr it1
+0037 D2A8               17             setb ie.0
+0039 D2AA               18             setb ex1
+003B D2A9               19             setb et0
+003D D2AB               20             setb et1
+003F D2AF               21             setb ea
+0041 758966             22             mov tmod, #01100110b
+0044 D28C               23             setb tr0
+0046 D28E               24             setb tr1
+0048 758AFF             25             mov tl0, #0ffh
+004B 758CFF             26             mov th0, #0ffh
+004E 758BFF             27             mov tl1, #0ffh
+0051 758DFF             28             mov th1, #0ffh
+                        29
+                        30             ;обычные цифры
+0054 7530C0             31             mov 30h,#11000000b ;0
+0057 7531F9             32             mov 31h,#11111001b ;1
+005A 7532A4             33             mov 32h,#10100100b ;2
+005D 7533B0             34             mov 33h,#10110000b ;3
+0060 753499             35             mov 34h,#10011001b ;4
+0063 753592             36             mov 35h,#10010010b ;5
+0066 753682             37             mov 36h,#10000010b ;6
+0069 7537F8             38             mov 37h,#11111000b ;7
+006C 753880             39             mov 38h,#10000000b ;8
+006F 753990             40             mov 39h,#10010000b ;9
+0072 753A88             41             mov 3ah,#10001000b ;a
+0075 753B83             42             mov 3bh,#10000011b ;b
+0078 753CC6             43             mov 3ch,#11000110b ;c
+007B 753DA1             44             mov 3dh,#10100001b ;d
+                        45
+                        46             ;отзеркаленные цифры
+007E 7540C0             47             mov 40h,#11000000b ;0
+0081 7541CF             48             mov 41h,#11001111b ;1
+0084 754292             49             mov 42h,#10010010b ;2
+0087 754386             50             mov 43h,#10000110b ;3
+008A 75448D             51             mov 44h,#10001101b ;4
+008D 7545A4             52             mov 45h,#10100100b ;5
+0090 754682             53             mov 46h,#10000010b ;6
+0093 7547CE             54             mov 47h,#11001110b ;7
+0096 754880             55             mov 48h,#10000000b ;8
+0099 754984             56             mov 49h,#10000100b ;9
+009C 754A88             57             mov 4ah,#10001000b ;a
+009F 754BA1             58             mov 4bh,#10100001b ;b
+00A2 754CF0             59             mov 4ch,#11110000b ;c
+00A5 754D83             60             mov 4dh,#10000011b ;d
+                        61
+00A8 C2D5               62             clr f0
+00AA 756000             63             mov 60h,#0
+00AD 7C0F               64             mov r4, #15
                         65
-00B9 7590BF             66             mov p1,#10111111b
-00BC E590               67             mov a,p1
-00BE 30E02A             68             jnb acc.0, kn3
-00C1 30E136             69             jnb acc.1, kn6
-00C4 30E242             70             jnb acc.2, kn9
-                        71
-00C7 75907F             72             mov p1, #01111111b
-00CA E590               73             mov a, p1
-00CC 30E03F             74             jnb acc.0, knA
-00CF 30E141             75             jnb acc.1, knB
-00D2 30E243             76             jnb acc.2, knC
-00D5 30E345             77             jnb acc.3, knD
-                        78
-00D8 7C05               79             mov r4, #5
+                        66             ;обработка нажатий матричной клавиатуры
+00AF DCFE               67     keypad: djnz r4, keypad
+00B1 7590EF             68             mov p1, #11101111b
+00B4 E590               69             mov a, p1
+00B6 30E03F             70             jnb acc.0, kn1
+00B9 30E14B             71             jnb acc.1, kn4
+00BC 30E257             72             jnb acc.2, kn7
+                        73
+00BF 7590DF             74             mov p1,#11011111b
+00C2 E590               75             mov a,p1
+00C4 30E036             76             jnb acc.0, kn2
+00C7 30E142             77             jnb acc.1, kn5
+00CA 30E24E             78             jnb acc.2, kn8
+00CD 30E323             79             jnb acc.3, kn0
                         80
-00DA 80BC               81             jmp keypad
-                        82
-00DC 7A00               83     kn0:    mov r2,#0
-00DE 020122             84             jmp print1
-                        85
-00E1 7A01               86     kn1:    mov r2, #1
-00E3 020122             87             jmp print1
-                        88
-00E6 7A02               89     kn2:    mov r2, #2
-00E8 020122             90             jmp print1
-                        91
-00EB 7A03               92     kn3:    mov r2,#3
-00ED 020122             93             jmp print1
-                        94
-00F0 7A04               95     kn4:    mov r2, #4
-00F2 020122             96             jmp print1
+00D0 7590BF             81             mov p1,#10111111b
+00D3 E590               82             mov a,p1
+00D5 30E02A             83             jnb acc.0, kn3
+00D8 30E136             84             jnb acc.1, kn6
+00DB 30E242             85             jnb acc.2, kn9
+                        86
+00DE 75907F             87             mov p1, #01111111b
+00E1 E590               88             mov a, p1
+00E3 30E03F             89             jnb acc.0, knA
+00E6 30E141             90             jnb acc.1, knB
+00E9 30E243             91             jnb acc.2, knC
+00EC 30E345             92             jnb acc.3, knD
+                        93
+00EF 7C0F               94             mov r4, #15
+                        95
+00F1 80BC               96             jmp keypad
                         97
-00F5 7A05               98     kn5:    mov r2, #5
-00F7 020122             99             jmp print1
+00F3 7A00               98     kn0:    mov r2,#0
+00F5 020139             99             jmp print1
                        100
-00FA 7A06              101     kn6:    mov r2, #6
-00FC 020122            102             jmp print1
+00F8 7A01              101     kn1:    mov r2, #1
+00FA 020139            102             jmp print1
                        103
-00FF 7A07              104     kn7:    mov r2, #7
-0101 020122            105             jmp print1
+00FD 7A02              104     kn2:    mov r2, #2
+00FF 020139            105             jmp print1
                        106
-0104 7A08              107     kn8:    mov r2, #8
-0106 020122            108             jmp print1
+0102 7A03              107     kn3:    mov r2,#3
+0104 020139            108             jmp print1
                        109
-0109 7A09              110     kn9:    mov r2, #9
-010B 020122            111             jmp print1
+0107 7A04              110     kn4:    mov r2, #4
+0109 020139            111             jmp print1
                        112
-010E 7A0A              113     knA:    mov r2, #0Ah
-0110 020122            114             jmp print1
+010C 7A05              113     kn5:    mov r2, #5
+010E 020139            114             jmp print1
                        115
-0113 7A0B              116     knB:    mov r2, #0Bh
-0115 020122            117             jmp print1
+0111 7A06              116     kn6:    mov r2, #6
+0113 020139            117             jmp print1
                        118
-0118 7A0C              119     knC:    mov r2, #0Ch
-011A 020122            120             jmp print1
+0116 7A07              119     kn7:    mov r2, #7
+0118 020139            120             jmp print1
                        121
-011D 7A0D              122     knD:    mov r2, #0Dh
-011F 020122            123             jmp print1
+011B 7A08              122     kn8:    mov r2, #8
+011D 020139            123             jmp print1
                        124
-0122 7C05              125     print1: mov r4, #5
-0124 30D50D            126             jnb f0, print2
-0127 856080            127             mov p0, 60h
-012A EA                128             mov a, r2
-012B 2430              129             add a, #30h
-012D F8                130             mov r0, a
-012E 86A0              131             mov p2, @r0
-0130 C2D5              132             clr f0
-0132 0198              133             jmp keypad
-                       134
-0134 EA                135     print2: mov a, r2
-0135 CB                136             xch a,r3
-0136 EA                137             mov a, r2
-0137 2430              138             add a, #30h
-0139 F8                139             mov r0, a
-013A 86A0              140             mov p2, @r0
-013C 8660              141             mov 60h, @r0
-013E D2D5              142             setb f0
-0140 0198              143             jmp keypad
-                       144
-                       145
-0142 C0D0              146     mirror: push psw
-0144 C0E0              147             push acc
-0146 7F05              148             mov r7, #5
+0120 7A09              125     kn9:    mov r2, #9
+0122 020139            126             jmp print1
+                       127
+0125 7A0A              128     knA:    mov r2, #0Ah
+0127 020139            129             jmp print1
+                       130
+012A 7A0B              131     knB:    mov r2, #0Bh
+012C 020139            132             jmp print1
+                       133
+012F 7A0C              134     knC:    mov r2, #0Ch
+0131 020139            135             jmp print1
+                       136
+0134 7A0D              137     knD:    mov r2, #0Dh
+0136 020139            138             jmp print1
+                       139
+0139 7C0F              140     print1: mov r4, #15
+013B 30D50D            141             jnb f0, print2
+013E 856080            142             mov p0, 60h
+0141 EA                143             mov a, r2
+0142 2430              144             add a, #30h
+0144 F8                145             mov r0, a
+0145 86A0              146             mov p2, @r0
+0147 C2D5              147             clr f0
+0149 01AF              148             jmp keypad
                        149
-0148 00                150     wts:    nop
-0149 DFFD              151             djnz r7, wts
-014B 20B20C            152             jb p3.2, i_end
-014E EA                153             mov a,r2
-014F 2440              154             add a,#40h
-0151 F8                155             mov r0,a
-0152 8680              156             mov p0,@r0
-0154 EB                157             mov a,r3
-0155 2440              158             add a,#40h
-0157 F9                159             mov r1,a
-0158 87A0              160             mov p2,@r1
-                       161
-015A D0E0              162     i_end:  pop acc
-015C D0D0              163             pop psw
-015E C289              164             clr ie0
-0160 32                165             reti
-                       166             end
+014B EA                150     print2: mov a, r2
+014C FB                151             mov r3, a
+014D EA                152             mov a, r2
+014E 2430              153             add a, #30h
+0150 F8                154             mov r0, a
+0151 86A0              155             mov p2, @r0
+0153 8660              156             mov 60h, @r0
+0155 D2D5              157             setb f0
+0157 01AF              158             jmp keypad
+                       159
+0159 C0D0              160     mirror: push psw
+015B C0E0              161             push acc
+015D 7F0A              162             mov r7, #10
+                       163
+015F 00                164     wts:    nop
+0160 DFFD              165             djnz r7, wts
+0162 20B30C            166             jb p3.3, i_end
+0165 EA                167             mov a,r2
+0166 2440              168             add a,#40h
+0168 F8                169             mov r0,a
+0169 8680              170             mov p0,@r0
+016B EB                171             mov a,r3
+016C 2440              172             add a,#40h
+016E F9                173             mov r1,a
+016F 87A0              174             mov p2,@r1
+                       175
+0171 D0E0              176     i_end:  pop acc
+0173 D0D0              177             pop psw
+0175 C289              178             clr ie0
+0177 32                179             reti
+                       180
+0178 C0D0              181     plus:   push psw
+017A C0E0              182             push acc
+017C 7F0A              183             mov r7, #10
+                       184
+017E 00                185     wts_p:  nop
+017F DFFD              186             djnz r7, wts_p
+0181 20B408            187             jb p3.4, ip_end
+0184 EA                188             mov a,r2
+0185 04                189             inc a
+0186 FA                190             mov r2,a
+0187 2430              191             add a, #30h
+0189 F8                192             mov r0,a
+018A 86A0              193             mov p2, @r0
+                       194
+018C D0E0              195     ip_end: pop acc
+018E D0D0              196             pop psw
+0190 32                197             reti
+                       198
+0191 C0D0              199     minus:  push psw
+0193 C0E0              200             push acc
+0195 7F0A              201             mov r7, #10
+                       202
+0197 00                203     wts_m:  nop
+0198 DFFD              204             djnz r7, wts_m
+019A 20B5EF            205             jb p3.5, ip_end
+019D EA                206             mov a,r2
+019E 14                207             dec a
+019F FA                208             mov r2,a
+01A0 2430              209             add a, #30h
+01A2 F8                210             mov r0,a
+01A3 86A0              211             mov p2, @r0
+                       212
+01A5 D0E0              213     im_end: pop acc
+01A7 D0D0              214             pop psw
+01A9 32                215             reti
+                       216             end
 ASSEMBLY COMPLETE, NO ERRORS FOUND, NO WARNINGS
 
 
@@ -232,8 +282,8 @@ EA . . . . . . . . . . . . . . . . .  B  ADDR  00AFH
 EC . . . . . . . . . . . . . . . . .  B  ADDR  00AEH  NOT USED
 EECON. . . . . . . . . . . . . . . .  D  ADDR  0096H  NOT USED
 ES . . . . . . . . . . . . . . . . .  B  ADDR  00ACH  NOT USED
-ET0. . . . . . . . . . . . . . . . .  B  ADDR  00A9H  NOT USED
-ET1. . . . . . . . . . . . . . . . .  B  ADDR  00ABH  NOT USED
+ET0. . . . . . . . . . . . . . . . .  B  ADDR  00A9H
+ET1. . . . . . . . . . . . . . . . .  B  ADDR  00ABH
 ET2. . . . . . . . . . . . . . . . .  B  ADDR  00ADH  NOT USED
 EX0. . . . . . . . . . . . . . . . .  B  ADDR  00A8H  NOT USED
 EX1. . . . . . . . . . . . . . . . .  B  ADDR  00AAH
@@ -246,6 +296,7 @@ FE . . . . . . . . . . . . . . . . .  B  ADDR  009FH  NOT USED
 IE . . . . . . . . . . . . . . . . .  D  ADDR  00A8H
 IE0. . . . . . . . . . . . . . . . .  B  ADDR  0089H
 IE1. . . . . . . . . . . . . . . . .  B  ADDR  008BH  NOT USED
+IM_END . . . . . . . . . . . . . . .  C  ADDR  01A5H  NOT USED
 INT0 . . . . . . . . . . . . . . . .  B  ADDR  00B2H  NOT USED
 INT1 . . . . . . . . . . . . . . . .  B  ADDR  00B3H  NOT USED
 IP . . . . . . . . . . . . . . . . .  D  ADDR  00B8H  NOT USED
@@ -254,28 +305,30 @@ IPH0 . . . . . . . . . . . . . . . .  D  ADDR  00B7H  NOT USED
 IPH1 . . . . . . . . . . . . . . . .  D  ADDR  00B3H  NOT USED
 IPL0 . . . . . . . . . . . . . . . .  D  ADDR  00B8H  NOT USED
 IPL1 . . . . . . . . . . . . . . . .  D  ADDR  00B2H  NOT USED
+IP_END . . . . . . . . . . . . . . .  C  ADDR  018CH
 IT0. . . . . . . . . . . . . . . . .  B  ADDR  0088H
 IT1. . . . . . . . . . . . . . . . .  B  ADDR  008AH
-I_END. . . . . . . . . . . . . . . .  C  ADDR  015AH
+I_END. . . . . . . . . . . . . . . .  C  ADDR  0171H
 KBE. . . . . . . . . . . . . . . . .  D  ADDR  009DH  NOT USED
 KBF. . . . . . . . . . . . . . . . .  D  ADDR  009EH  NOT USED
 KBLS . . . . . . . . . . . . . . . .  D  ADDR  009CH  NOT USED
-KEYPAD . . . . . . . . . . . . . . .  C  ADDR  0098H
-KN0. . . . . . . . . . . . . . . . .  C  ADDR  00DCH
-KN1. . . . . . . . . . . . . . . . .  C  ADDR  00E1H
-KN2. . . . . . . . . . . . . . . . .  C  ADDR  00E6H
-KN3. . . . . . . . . . . . . . . . .  C  ADDR  00EBH
-KN4. . . . . . . . . . . . . . . . .  C  ADDR  00F0H
-KN5. . . . . . . . . . . . . . . . .  C  ADDR  00F5H
-KN6. . . . . . . . . . . . . . . . .  C  ADDR  00FAH
-KN7. . . . . . . . . . . . . . . . .  C  ADDR  00FFH
-KN8. . . . . . . . . . . . . . . . .  C  ADDR  0104H
-KN9. . . . . . . . . . . . . . . . .  C  ADDR  0109H
-KNA. . . . . . . . . . . . . . . . .  C  ADDR  010EH
-KNB. . . . . . . . . . . . . . . . .  C  ADDR  0113H
-KNC. . . . . . . . . . . . . . . . .  C  ADDR  0118H
-KND. . . . . . . . . . . . . . . . .  C  ADDR  011DH
-MIRROR . . . . . . . . . . . . . . .  C  ADDR  0142H
+KEYPAD . . . . . . . . . . . . . . .  C  ADDR  00AFH
+KN0. . . . . . . . . . . . . . . . .  C  ADDR  00F3H
+KN1. . . . . . . . . . . . . . . . .  C  ADDR  00F8H
+KN2. . . . . . . . . . . . . . . . .  C  ADDR  00FDH
+KN3. . . . . . . . . . . . . . . . .  C  ADDR  0102H
+KN4. . . . . . . . . . . . . . . . .  C  ADDR  0107H
+KN5. . . . . . . . . . . . . . . . .  C  ADDR  010CH
+KN6. . . . . . . . . . . . . . . . .  C  ADDR  0111H
+KN7. . . . . . . . . . . . . . . . .  C  ADDR  0116H
+KN8. . . . . . . . . . . . . . . . .  C  ADDR  011BH
+KN9. . . . . . . . . . . . . . . . .  C  ADDR  0120H
+KNA. . . . . . . . . . . . . . . . .  C  ADDR  0125H
+KNB. . . . . . . . . . . . . . . . .  C  ADDR  012AH
+KNC. . . . . . . . . . . . . . . . .  C  ADDR  012FH
+KND. . . . . . . . . . . . . . . . .  C  ADDR  0134H
+MINUS. . . . . . . . . . . . . . . .  C  ADDR  0191H
+MIRROR . . . . . . . . . . . . . . .  C  ADDR  0159H
 OSCCON . . . . . . . . . . . . . . .  D  ADDR  0086H  NOT USED
 OV . . . . . . . . . . . . . . . . .  B  ADDR  00D2H  NOT USED
 P. . . . . . . . . . . . . . . . . .  B  ADDR  00D0H  NOT USED
@@ -293,9 +346,10 @@ P4M2 . . . . . . . . . . . . . . . .  D  ADDR  00E4H  NOT USED
 P5 . . . . . . . . . . . . . . . . .  D  ADDR  00E8H  NOT USED
 PC . . . . . . . . . . . . . . . . .  B  ADDR  00BEH  NOT USED
 PCON . . . . . . . . . . . . . . . .  D  ADDR  0087H  NOT USED
+PLUS . . . . . . . . . . . . . . . .  C  ADDR  0178H
 PPCL . . . . . . . . . . . . . . . .  B  ADDR  00BEH  NOT USED
-PRINT1 . . . . . . . . . . . . . . .  C  ADDR  0122H
-PRINT2 . . . . . . . . . . . . . . .  C  ADDR  0134H
+PRINT1 . . . . . . . . . . . . . . .  C  ADDR  0139H
+PRINT2 . . . . . . . . . . . . . . .  C  ADDR  014BH
 PS . . . . . . . . . . . . . . . . .  B  ADDR  00BCH  NOT USED
 PSL. . . . . . . . . . . . . . . . .  B  ADDR  00BCH  NOT USED
 PSW. . . . . . . . . . . . . . . . .  D  ADDR  00D0H
@@ -350,23 +404,25 @@ TCON . . . . . . . . . . . . . . . .  D  ADDR  0088H  NOT USED
 TF0. . . . . . . . . . . . . . . . .  B  ADDR  008DH  NOT USED
 TF1. . . . . . . . . . . . . . . . .  B  ADDR  008FH  NOT USED
 TF2. . . . . . . . . . . . . . . . .  B  ADDR  00CFH  NOT USED
-TH0. . . . . . . . . . . . . . . . .  D  ADDR  008CH  NOT USED
-TH1. . . . . . . . . . . . . . . . .  D  ADDR  008DH  NOT USED
+TH0. . . . . . . . . . . . . . . . .  D  ADDR  008CH
+TH1. . . . . . . . . . . . . . . . .  D  ADDR  008DH
 TH2. . . . . . . . . . . . . . . . .  D  ADDR  00CDH  NOT USED
 TI . . . . . . . . . . . . . . . . .  B  ADDR  0099H  NOT USED
 TIMER0 . . . . . . . . . . . . . . .  C  ADDR  000BH  NOT USED
 TIMER1 . . . . . . . . . . . . . . .  C  ADDR  001BH  NOT USED
 TIMER2 . . . . . . . . . . . . . . .  C  ADDR  002BH  NOT USED
-TL0. . . . . . . . . . . . . . . . .  D  ADDR  008AH  NOT USED
-TL1. . . . . . . . . . . . . . . . .  D  ADDR  008BH  NOT USED
+TL0. . . . . . . . . . . . . . . . .  D  ADDR  008AH
+TL1. . . . . . . . . . . . . . . . .  D  ADDR  008BH
 TL2. . . . . . . . . . . . . . . . .  D  ADDR  00CCH  NOT USED
-TMOD . . . . . . . . . . . . . . . .  D  ADDR  0089H  NOT USED
-TR0. . . . . . . . . . . . . . . . .  B  ADDR  008CH  NOT USED
-TR1. . . . . . . . . . . . . . . . .  B  ADDR  008EH  NOT USED
+TMOD . . . . . . . . . . . . . . . .  D  ADDR  0089H
+TR0. . . . . . . . . . . . . . . . .  B  ADDR  008CH
+TR1. . . . . . . . . . . . . . . . .  B  ADDR  008EH
 TR2. . . . . . . . . . . . . . . . .  B  ADDR  00CAH  NOT USED
 TXD. . . . . . . . . . . . . . . . .  B  ADDR  00B1H  NOT USED
 WDTCON . . . . . . . . . . . . . . .  D  ADDR  00A7H  NOT USED
 WDTPRG . . . . . . . . . . . . . . .  D  ADDR  00A7H  NOT USED
 WDTRST . . . . . . . . . . . . . . .  D  ADDR  00A6H  NOT USED
 WR . . . . . . . . . . . . . . . . .  B  ADDR  00B6H  NOT USED
-WTS. . . . . . . . . . . . . . . . .  C  ADDR  0148H
+WTS. . . . . . . . . . . . . . . . .  C  ADDR  015FH
+WTS_M. . . . . . . . . . . . . . . .  C  ADDR  0197H
+WTS_P. . . . . . . . . . . . . . . .  C  ADDR  017EH

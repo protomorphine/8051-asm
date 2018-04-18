@@ -1,14 +1,8 @@
 	org 0
 	jmp start
-
-	org 0BH
-	jmp plus
 	
-	org 13h
+	org 3
 	jmp mirror
-
-	org 1BH
-	jmp minus
 	
 	org 30h
 start:	mov sp, #0FAH
@@ -16,16 +10,7 @@ start:	mov sp, #0FAH
 	clr it1
 	setb ie.0
 	setb ex1
-	setb et0
-	setb et1
 	setb ea
-	mov tmod, #01100110b
-	setb tr0
-	setb tr1
-	mov tl0, #0ffh
-	mov th0, #0ffh
-	mov tl1, #0ffh
-	mov th1, #0ffh
 
 	;обычные цифры
 	mov 30h,#11000000b ;0
@@ -50,18 +35,18 @@ start:	mov sp, #0FAH
 	mov 43h,#10000110b ;3
 	mov 44h,#10001101b ;4
 	mov 45h,#10100100b ;5
-	mov 46h,#10000010b ;6
+	mov 46h,#10100000b ;6
 	mov 47h,#11001110b ;7
 	mov 48h,#10000000b ;8
 	mov 49h,#10000100b ;9
 	mov 4ah,#10001000b ;a
-	mov 4bh,#10100001b ;b
-	mov 4ch,#11110000b ;c
-	mov 4dh,#10000011b ;d
+	mov 4bh,#10000011b ;b
+	mov 4ch,#11000110b ;c
+	mov 4dh,#10100001b ;d
 
 	clr f0
 	mov 60h,#0
-	mov r4, #15
+	mov r4, #5
 
 	;обработка нажатий матричной клавиатуры
 keypad:	djnz r4, keypad
@@ -91,7 +76,7 @@ keypad:	djnz r4, keypad
 	jnb acc.2, knC
 	jnb acc.3, knD
 
-	mov r4, #15
+	mov r4, #5
 	
 	jmp keypad
 
@@ -137,7 +122,7 @@ knC:	mov r2, #0Ch
 knD:	mov r2, #0Dh
 	jmp print1
 
-print1:	mov r4, #15
+print1:	mov r4, #5
 	jnb f0, print2
 	mov p0, 60h
 	mov a, r2
@@ -157,13 +142,14 @@ print2:	mov a, r2
 	setb f0
 	jmp keypad
 
+
 mirror:	push psw
 	push acc
-	mov r7, #10
+	mov r7, #5
 
 wts:	nop
 	djnz r7, wts
-	jb p3.3, i_end
+	jb p3.2, i_end
 	mov a,r2
 	add a,#40h
 	mov r0,a
@@ -177,40 +163,5 @@ i_end:	pop acc
 	pop psw
 	clr ie0
 	reti
-
-plus:	push psw
-	push acc
-	mov r7, #10
 	
-wts_p:	nop
-	djnz r7, wts_p
-	jb p3.4, ip_end
-	mov a,r2
-	inc a
-	mov r2,a
-	add a, #30h
-	mov r0,a
-	mov p2, @r0
-	
-ip_end:	pop acc
-	pop psw
-	reti
-
-minus:	push psw
-	push acc
-	mov r7, #10
-
-wts_m:	nop
-	djnz r7, wts_m
-	jb p3.5, ip_end
-	mov a,r2
-	dec a
-	mov r2,a
-	add a, #30h
-	mov r0,a
-	mov p2, @r0
-	
-im_end:	pop acc
-	pop psw
-	reti
 	end
